@@ -1,28 +1,49 @@
 use bevy::prelude::*;
+use bevy::render::camera::ScalingMode;
+use crate::player::Player;
 
 mod enums;
-mod menu;
+mod player;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(
+            DefaultPlugins
+                .set(ImagePlugin::default_nearest())
+                .set(WindowPlugin {
+                    primary_window: Some(Window {
+                        title: "Adrift".into(),
+                        resolution: (640.0, 480.0).into(),
+
+                        ..default()
+                    }),
+                    ..default()
+                })
+            .build()
+        )
         .add_systems(Startup, setup)
+        .add_systems(Update, player::character_movement)
         .run();
 }
 
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>){
-    commands.spawn(Camera2dBundle::default());
-    info!("Camera Loaded");
-    commands.spawn(SpriteBundle {
-        texture: asset_server.load("sprites/test.png"),
-        ..default()
-    });
-    info!("test image loaded");
-}
+    let mut camera = Camera2dBundle::default();
 
-// Generic system that takes a component as a parameter, and will despawn all entities with that component
-fn despawn_screen<T: Component>(to_despawn: Query<Entity, With<T>>, mut commands: Commands) {
-    for entity in &to_despawn {
-        commands.entity(entity).despawn_recursive();
-    }
+    camera.projection.scaling_mode = ScalingMode::AutoMin {
+        min_width: 1024.0,
+        min_height: 576.0,
+    };
+
+    commands.spawn(camera);
+    info!("Camera Loaded");
+
+    let texture = asset_server.load("sprites/placeholder.png");
+
+    commands.spawn((SpriteBundle {
+        texture,
+        ..default()
+    },
+    Player{ accel: 10.0, speed_x: 0.0, speed_y: 0.0 },
+    ));
+    info!("test image loaded");
 }
