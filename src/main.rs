@@ -1,9 +1,10 @@
 use bevy::prelude::*;
 use bevy::render::camera::ScalingMode;
-use crate::player::Player;
+use crate::gizmos::player::*;
+use crate::gizmos::gizmo::*;
 
 mod enums;
-mod player;
+mod gizmos;
 
 fn main() {
     App::new()
@@ -21,8 +22,13 @@ fn main() {
                 })
             .build()
         )
+        .insert_resource(Vitals{
+            health: 100,
+            oxygen: 100.0,
+            hydrogen: 100.0,
+        })
         .add_systems(Startup, setup)
-        .add_systems(Update, player::character_movement)
+        .add_systems(Update, (player_movement, vitals_tick))
         .run();
 }
 
@@ -39,11 +45,19 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>){
 
     let texture = asset_server.load("sprites/placeholder.png");
 
-    commands.spawn((SpriteBundle {
-        texture,
-        ..default()
-    },
-    Player{ accel: 10.0, speed_x: 0.0, speed_y: 0.0 },
+    commands.spawn((
+        SpriteBundle {
+            texture,
+            ..default()
+        },
+        Movable {
+            accel: 10.0,
+            speed_x: 0.0,
+            speed_y: 0.0
+        },
+        Player {
+            vitals_timer: Timer::from_seconds(1.0, TimerMode::Repeating),
+        },
     ));
     info!("test image loaded");
 }
