@@ -8,4 +8,7 @@ I'm currently just learning how to write games with bevy, the engine used for th
 ever become a fully functional game, which is supported by the fact that I have very little experience with both Rust
 and Game Development in general.
 
-Engine Used: Bevy v0.11.2
+Engine Used: Bevy v0.11
+
+Bevy Plugins:
+- bevy-inspector-egui v0.19

@@ -1,16 +1,20 @@
 use bevy::prelude::*;
 
+pub struct GizmoPlugin;
 
-#[derive(Component)]
+impl Plugin for GizmoPlugin {
+    fn build(&self, app: &mut App) {
+        app
+            .register_type::<Movable>();
+    }
+}
+
+#[derive(Component, Default, Reflect)]
+#[reflect(Component)]
 pub struct Movable {
     pub accel: f32,
     pub speed_x: f32,
     pub speed_y: f32,
-}
-
-#[derive(Component)]
-pub struct Gizmo{
-    health: u32,
 }
 
 pub fn move_gizmo (transform: &mut Mut<Transform>, movable: &Mut<Movable>) {
