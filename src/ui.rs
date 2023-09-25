@@ -1,5 +1,6 @@
 use bevy::prelude::*;
-use crate::gizmos::player::{Player, Vitals};
+use crate::gizmo::*;
+use crate::player::*;
 
 pub struct GameUI;
 

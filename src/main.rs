@@ -1,14 +1,16 @@
+mod enums;
+mod ui;
+mod player;
+mod gizmo;
+
 use bevy::input::common_conditions::input_toggle_active;
 use bevy::prelude::*;
 use bevy::render::camera::ScalingMode;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
-use gizmos::player::*;
-use gizmos::gizmo::*;
 use ui::GameUI;
+use crate::gizmo::*;
+use crate::player::*;
 
-mod enums;
-mod gizmos;
-mod ui;
 
 fn main() {
     App::new()
@@ -39,8 +41,8 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>){
     let mut camera = Camera2dBundle::default();
 
     camera.projection.scaling_mode = ScalingMode::AutoMin {
-        min_width: 1280.0,
-        min_height: 720.0,
+        min_width: 1920.0,
+        min_height: 1080.0,
     };
 
     commands.spawn(camera);

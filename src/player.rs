@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use crate::gizmos::gizmo::*;
+use crate::gizmo::*;
 
 pub struct PlayerPlugin;
 
