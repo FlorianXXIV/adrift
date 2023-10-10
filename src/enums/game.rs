@@ -1,8 +1,9 @@
-use bevy::prelude::{Component, Resource};
+use bevy::prelude::{Component, Resource, States};
 use bevy::reflect::Reflect;
 
-#[derive(Resource)]
-enum GameState {
+#[derive(Clone, Copy, Default, Eq, PartialEq, Debug, Hash, States)]
+pub enum GameState {
+    #[default]
     Splash,
     Menu,
     Game

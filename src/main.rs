@@ -3,17 +3,21 @@ mod ui;
 mod player;
 mod gizmo;
 
+mod splash;
+
 use bevy::input::common_conditions::input_toggle_active;
 use bevy::prelude::*;
 use bevy::render::camera::ScalingMode;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use ui::GameUI;
+use crate::enums::game::GameState;
 use crate::gizmo::*;
 use crate::player::*;
 
 
 fn main() {
     App::new()
+        .add_state::<GameState>()
         .add_plugins(
             DefaultPlugins
                 .set(ImagePlugin::default_nearest())
@@ -70,4 +74,10 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>){
         Player,
     ));
     info!("Spawned Player");
+}
+
+pub fn despawn_screen<T: Component>(to_despawn: Query<Entity, With<T>>, mut commands: Commands){
+    for entity in &to_despawn {
+        commands.entity(entity).despawn_recursive();
+    }
 }
