@@ -2,8 +2,9 @@ mod enums;
 mod ui;
 mod player;
 mod gizmo;
-
 mod splash;
+mod menu;
+mod game;
 
 use bevy::input::common_conditions::input_toggle_active;
 use bevy::prelude::*;
@@ -11,6 +12,7 @@ use bevy::render::camera::ScalingMode;
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use ui::GameUI;
 use crate::enums::game::GameState;
+use crate::game::GamePlugin;
 use crate::gizmo::*;
 use crate::player::*;
 
@@ -36,12 +38,12 @@ fn main() {
             WorldInspectorPlugin::default()
                 .run_if(input_toggle_active(false, KeyCode::Escape))
         )
-        .add_plugins((PlayerPlugin, GameUI))
+        .add_plugins(GamePlugin)
         .add_systems(Startup, setup)
         .run();
 }
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>){
+fn setup(mut commands: Commands){
     let mut camera = Camera2dBundle::default();
 
     camera.projection.scaling_mode = ScalingMode::AutoMin {
@@ -51,29 +53,6 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>){
 
     commands.spawn(camera);
     info!("Camera Loaded");
-
-    let texture = asset_server.load("sprites/placeholder.png");
-
-    commands.spawn((
-        SpriteBundle {
-            texture,
-            ..default()
-        },
-        Movable {
-            accel: 10.0,
-            speed_x: 0.0,
-            speed_y: 0.0
-        },
-        Vitals {
-            vitals_timer: Timer::from_seconds(1.0, TimerMode::Repeating),
-            health: 100,
-            oxygen: 100.0,
-            hydrogen: 100.0,
-        },
-        Name::new("Player"),
-        Player,
-    ));
-    info!("Spawned Player");
 }
 
 pub fn despawn_screen<T: Component>(to_despawn: Query<Entity, With<T>>, mut commands: Commands){

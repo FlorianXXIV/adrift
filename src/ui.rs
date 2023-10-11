@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use crate::enums::game::GameState;
 use crate::gizmo::*;
 use crate::player::*;
 
@@ -7,8 +8,8 @@ pub struct GameUI;
 impl Plugin for GameUI {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(Startup, spawn_game_ui)
-            .add_systems(Update, update_vitals_ui);
+            .add_systems(OnEnter(GameState::Game), spawn_game_ui)
+            .add_systems(Update, update_vitals_ui.run_if(in_state(GameState::Game)));
     }
 }
 

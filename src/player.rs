@@ -1,12 +1,12 @@
 use bevy::prelude::*;
 use crate::gizmo::*;
-
+use crate::enums::game::GameState;
 pub struct PlayerPlugin;
 
 impl Plugin for PlayerPlugin {
     fn build(&self, app: &mut App) {
         app
-            .add_systems(Update, (player_movement, vitals_tick))
+            .add_systems(Update, (player_movement, vitals_tick).run_if(in_state(GameState::Game)))
             .register_type::<Vitals>();
     }
 }
